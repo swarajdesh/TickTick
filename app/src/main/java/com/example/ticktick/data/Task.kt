@@ -6,6 +6,10 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import java.text.DateFormat
 
+/**
+  One single Activity the main Activity which will be basically container for different fragments
+ **/
+
 @Entity(tableName = "task_table")
 @Parcelize
 data class Task(
