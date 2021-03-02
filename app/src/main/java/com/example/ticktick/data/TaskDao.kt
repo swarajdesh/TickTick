@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface TaskDao {
 
     @Query("SELECT * FROM task_table WHERE name LIKE '%' || :searchQuery || '%' ORDER BY important DESC")
-    fun getTasks(searchQuery: String): Flow<List<Task>>  // Flow represents stream of data and Flow can only be used inside the coroutines that is why we don't need suspend modifier
+    fun getTasksSortedByName(searchQuery: String, hideCompleted: Boolean): Flow<List<Task>>  // Flow represents stream of data and Flow can only be used inside the coroutines that is why we don't need suspend modifier
     //Flow is asynchronous stream of data
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
