@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ticktick.R
 import com.example.ticktick.data.SortOrder
+import com.example.ticktick.data.Task
 import com.example.ticktick.databinding.FragmentTasksBinding
 import com.example.ticktick.util.onQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,7 +27,7 @@ Author : Swaraj Deshmukh
 
 
 @AndroidEntryPoint
-class TaskFragment : Fragment(R.layout.fragment_tasks) {
+class TaskFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClickListener {
 
     private val viewModel: TaskViewModel by viewModels()
 
@@ -35,7 +36,7 @@ class TaskFragment : Fragment(R.layout.fragment_tasks) {
 
         val binding = FragmentTasksBinding.bind(view)
 
-        val tasksAdapter = TasksAdapter()
+        val tasksAdapter = TasksAdapter(this)
 
         binding.apply {
             recyclerViewTasks.apply {
@@ -52,6 +53,15 @@ class TaskFragment : Fragment(R.layout.fragment_tasks) {
 
         setHasOptionsMenu(true)
     }
+
+    override fun onItemClick(task: Task) {
+        viewModel.onTaskSelected(task)
+    }
+
+    override fun onCheckBoxClicked(task: Task, isChecked: Boolean) {
+        viewModel.onTaskCheckedChanged(task, isChecked)
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_fragment_tasks, menu)
@@ -99,5 +109,7 @@ class TaskFragment : Fragment(R.layout.fragment_tasks) {
            else -> super.onOptionsItemSelected(item)
         }
     }
+
+
 
 }

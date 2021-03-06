@@ -6,6 +6,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.ticktick.data.PreferencesManager
 import com.example.ticktick.data.SortOrder
+import com.example.ticktick.data.Task
 import com.example.ticktick.data.TaskDao
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -30,6 +31,8 @@ class TaskViewModel @ViewModelInject constructor(
         taskDao.getTasks(query , filterPreferences.sortOrder, filterPreferences.hideCompleted)
     }
 
+    val tasks = tasksFlow.asLiveData() // liveData is part of android architecture component it is conceptually very similar to flow
+
     fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {
         preferencesManager.updateSortOrder(sortOrder)
     }
@@ -38,6 +41,11 @@ class TaskViewModel @ViewModelInject constructor(
         preferencesManager.updateHideCompleted(hideCompleted)
     }
 
-    val tasks = tasksFlow.asLiveData() // liveData is part of android architecture component it is conceptually very similar to flow
+    fun onTaskSelected(task: Task) {}
+    fun onTaskCheckedChanged(task: Task, isChecked: Boolean) = viewModelScope.launch {
+        taskDao.update(task.copy(completed = isChecked))
+    }
+
 }
+
 
