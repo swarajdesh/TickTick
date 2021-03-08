@@ -1,7 +1,6 @@
 package com.example.ticktick.data
 
 import androidx.room.*
-import com.example.ticktick.UI.tasks.SortOrder
 import kotlinx.coroutines.flow.Flow
 
 @Dao  //Data Access Objects (Dao) are the main classes where you define your database interactions. They can include a variety of query methods.

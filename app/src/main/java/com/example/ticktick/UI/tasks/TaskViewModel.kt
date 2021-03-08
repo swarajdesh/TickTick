@@ -8,9 +8,11 @@ import com.example.ticktick.data.PreferencesManager
 import com.example.ticktick.data.SortOrder
 import com.example.ticktick.data.Task
 import com.example.ticktick.data.TaskDao
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class TaskViewModel @ViewModelInject constructor(
@@ -21,6 +23,9 @@ class TaskViewModel @ViewModelInject constructor(
     val searchQuery = MutableStateFlow("")
 
     val preferencesFlow = preferencesManager.preferencesFlow
+
+    private val taskEventChannel = Channel<TasksEvent>()
+    val taskEvent = taskEventChannel.receiveAsFlow()
 
     private val tasksFlow = combine(
         searchQuery,
@@ -44,6 +49,19 @@ class TaskViewModel @ViewModelInject constructor(
     fun onTaskSelected(task: Task) {}
     fun onTaskCheckedChanged(task: Task, isChecked: Boolean) = viewModelScope.launch {
         taskDao.update(task.copy(completed = isChecked))
+    }
+
+    fun onTaskSwiped(task: Task) = viewModelScope.launch {
+        taskDao.delete(task)
+        taskEventChannel.send(TasksEvent.ShowUndoDeleteTaskMessage(task))
+    }
+
+    fun onUndoDeleteClick(task: Task) = viewModelScope.launch {
+        taskDao.insert(task)
+    }
+
+    sealed class TasksEvent {
+        data class ShowUndoDeleteTaskMessage(val task: Task) : TasksEvent()
     }
 
 }
