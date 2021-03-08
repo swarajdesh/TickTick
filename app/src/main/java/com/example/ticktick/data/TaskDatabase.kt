@@ -23,7 +23,7 @@ abstract class TaskDatabase : RoomDatabase() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
 
-            val dao =   database.get().taskDao()
+            val dao = database.get().taskDao()
 
             // coroutine is a piece of code that actually knows how to suspend execution and let the program continue with something else
             applicationScope.launch {

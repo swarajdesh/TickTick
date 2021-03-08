@@ -2,7 +2,7 @@ package com.example.ticktick.UI.tasks
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ListAdapter
+import androidx.recyclerview.widget.ListAdapter
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +10,7 @@ import com.example.ticktick.data.Task
 import com.example.ticktick.databinding.ItemTaskBinding
 
 // Extending List Adapter because the data we are getting is in list
-class TasksAdapter(private val listener: OnItemClickListener) : androidx.recyclerview.widget.ListAdapter<Task, TasksAdapter.TasksViewHolder>(DiffCallback()) {
+class TasksAdapter(private val listener: OnItemClickListener) : ListAdapter<Task, TasksAdapter.TasksViewHolder>(DiffCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksViewHolder {

@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao  //Data Access Objects (Dao) are the main classes where you define your database interactions. They can include a variety of query methods.
 interface TaskDao {
 
+
     fun getTasks(query: String, sortOrder: SortOrder, hideCompleted: Boolean): Flow<List<Task>> =
         when(sortOrder) {
             SortOrder.BY_DATE -> getTasksSortedByDateCreated(query, hideCompleted)

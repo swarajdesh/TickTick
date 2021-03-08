@@ -47,7 +47,8 @@ class TaskViewModel @ViewModelInject constructor(
     }
 
     fun onTaskSelected(task: Task) {}
-    fun onTaskCheckedChanged(task: Task, isChecked: Boolean) = viewModelScope.launch {
+
+    fun onTaskCheckedChanged(task: Task, isChecked: Boolean) = viewModelScope.launch     {
         taskDao.update(task.copy(completed = isChecked))
     }
 
