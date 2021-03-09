@@ -3,6 +3,8 @@ package com.example.ticktick.UI.tasks
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import com.example.ticktick.UI.ADD_TASK_RESULT_OK
+import com.example.ticktick.UI.EDIT_TASK_RESULT_OK
 import com.example.ticktick.data.PreferencesManager
 import com.example.ticktick.data.SortOrder
 import com.example.ticktick.data.Task
@@ -13,6 +15,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.awt.font.TextAttribute
 
 class TaskViewModel @ViewModelInject constructor(
     private val taskDao: TaskDao,
@@ -67,10 +70,22 @@ class TaskViewModel @ViewModelInject constructor(
         taskEventChannel.send(TasksEvent.NavigateToAddTaskScreen)
     }
 
+    fun onAddEditResult(result: Int) {
+        when (result) {
+            ADD_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task added")
+            EDIT_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task updated")
+        }
+    }
+
+    private fun showTaskSavedConfirmationMessage(text: String) = viewModelScope.launch {
+        taskEventChannel.send(TasksEvent.ShowTaskSavedConfirmationMessage(text))
+    }
+
     sealed class TasksEvent {
         object NavigateToAddTaskScreen : TasksEvent()
         data class NavigateToEditTaskScreen(val task: Task) : TasksEvent()
         data class ShowUndoDeleteTaskMessage(val task: Task) : TasksEvent()
+        data class ShowTaskSavedConfirmationMessage(val msg: String) : TasksEvent()
     }
 
 }
